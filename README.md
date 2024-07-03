@@ -66,8 +66,8 @@ PNAP/
 1. **Clone the repository:**
 
    ```sh
-   git clone https://github.com/yourusername/my-app.git
-   cd my-app
+   git clone https://github.com/samsmusa/pnap.git
+   cd pnap
    ```
 
 2. **Install dependencies:**
