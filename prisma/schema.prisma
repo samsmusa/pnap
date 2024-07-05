@@ -8,17 +8,30 @@ generator client {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
   name      String?
-  posts     Post[]
+  password  String
+  products  Product[]
+  orders  OrderItem[]
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  title     String
-  content   String?
-  published Boolean  @default(false)
-  authorId  Int
-  author    User     @relation(fields: [authorId], references: [id])
+model Product {
+  id            Int       @id @default(autoincrement())
+  title         String
+  description   String?
+  published     Boolean   @default(false)
+  ownerId Int
+  owner    User      @relation(fields: [ownerId], references: [id])
+  orderItems    OrderItem[]
+}
+
+
+model OrderItem {
+  id        Int        @id @default(autoincrement())
+  quantity  Int
+  productId Int
+  userId    Int
+  product   Product    @relation(fields: [productId], references: [id])
+  user      User       @relation(fields: [userId], references: [id])
 }

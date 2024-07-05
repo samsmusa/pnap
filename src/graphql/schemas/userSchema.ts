@@ -1,19 +1,29 @@
-import { gql } from 'apollo-server-express';
+import {gql} from 'apollo-server-express';
 
-export default gql`
+export const userSchema = gql`
   type User {
     id: ID!
     email: String!
     name: String
-    posts: [Post]
+    password: String!
+    products: [Product]
+    orders: [OrderItem]
   }
 
-  type Query {
+  type AuthPayload {
+    token: String!
+    user: User!
+  }
+
+  extend type Query {
     users: [User]
     user(id: ID!): User
   }
 
-  type Mutation {
-    createUser(email: String!, name: String): User
+  extend type Mutation {
+    createUser(email: String!, name: String, password: String!): User
+    updateUser(id: ID!, email: String, name: String, password: String): User
+    deleteUser(id: ID!): User
+    login(email: String!, password: String!): AuthPayload
   }
 `;

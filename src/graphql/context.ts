@@ -1,11 +1,18 @@
-import { PrismaClient } from '@prisma/client';
+import {PrismaClient} from '@prisma/client';
+import {Request} from 'express';
+import {getUserId} from '../utils/auth';
 
 const prisma = new PrismaClient();
 
 export interface Context {
-  prisma: PrismaClient;
+    prisma: PrismaClient;
+    userId: string | null;
 }
 
-export const context: Context = {
-  prisma,
+export const context = ({req}: { req: Request }): Context => {
+    const userId = getUserId(req);
+    return {
+        prisma,
+        userId,
+    };
 };

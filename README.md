@@ -9,12 +9,12 @@ PNAP/
 ├── src/
 │   ├── graphql/
 │   │   ├── resolvers/
-│   │   │   ├── userResolver.ts
-│   │   │   ├── postResolver.ts
+│   │   │   ├── userResolvers.ts
+│   │   │   ├── orderResolvers.ts
 │   │   │   └── index.ts
 │   │   ├── schemas/
 │   │   │   ├── userSchema.ts
-│   │   │   ├── postSchema.ts
+│   │   │   ├── orderSchema.ts
 │   │   │   └── index.ts
 │   │   └── context.ts
 │   ├── prisma/
@@ -22,13 +22,13 @@ PNAP/
 │   │   └── schema.prisma
 │   ├── models/
 │   │   ├── User.ts
-│   │   └── Post.ts
+│   │   └── Product.ts
 │   ├── routes/
 │   │   ├── userRoutes.ts
-│   │   └── postRoutes.ts
+│   │   └── productRoutes.ts
 │   ├── services/
 │   │   ├── userService.ts
-│   │   └── postService.ts
+│   │   └── productService.ts
 │   ├── utils/
 │   │   ├── logger.ts
 │   │   └── helpers.ts
@@ -172,7 +172,7 @@ query {
 }
 ```
 
-#### Query for a Single Post by ID
+#### Query for a Single Product by ID
 ```graphql
 query {
   post(id: 1) {
@@ -200,10 +200,10 @@ mutation {
 }
 ```
 
-#### Mutation to Create a Post
+#### Mutation to Create a Product
 ```graphql
 mutation {
-  createPost(title: "New Post", content: "This is a new post", authorId: 1) {
+  createPost(title: "New Product", content: "This is a new post", authorId: 1) {
     id
     title
     content

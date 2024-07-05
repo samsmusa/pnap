@@ -1,6 +1,7 @@
 import { gql } from 'apollo-server-express';
-import userSchema from './userSchema';
-import postSchema from './postSchema';
+import {userSchema} from './userSchema';
+import {orderSchema} from './orderSchema';
+import {productSchema} from './productSchema';
 
 const baseSchema = gql`
   type Query {
@@ -12,4 +13,4 @@ const baseSchema = gql`
   }
 `;
 
-export const typeDefs = [baseSchema, userSchema, postSchema];
+export const typeDefs = [baseSchema, userSchema, orderSchema, productSchema];

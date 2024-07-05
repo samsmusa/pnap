@@ -1,26 +1,37 @@
-import { Router } from 'express';
-import { getUsers, getUserById, createUser } from '../services/userService';
+import {Router} from 'express';
+import {
+    getAllUsers,
+    getUserById,
+    createUser,
+    updateUser,
+    deleteUser,
+} from '../services/userService';
 
 const router = Router();
 
 router.get('/', async (req, res) => {
-  const users = await getUsers();
-  res.json(users);
+    const users = await getAllUsers();
+    res.json(users);
 });
 
 router.get('/:id', async (req, res) => {
-  const user = await getUserById(Number(req.params.id));
-  if (user) {
+    const user = await getUserById(Number(req.params.id));
     res.json(user);
-  } else {
-    res.status(404).send('User not found');
-  }
 });
 
 router.post('/', async (req, res) => {
-  const { email, name } = req.body;
-  const user = await createUser(email, name);
-  res.status(201).json(user);
+    const newUser = await createUser(req.body);
+    res.json(newUser);
+});
+
+router.put('/:id', async (req, res) => {
+    const updatedUser = await updateUser(Number(req.params.id), req.body);
+    res.json(updatedUser);
+});
+
+router.delete('/:id', async (req, res) => {
+    const deletedUser = await deleteUser(Number(req.params.id));
+    res.json(deletedUser);
 });
 
 export default router;
