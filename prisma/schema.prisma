@@ -13,19 +13,30 @@ model User {
   name      String?
   password  String
   products  Product[]
-  orders  OrderItem[]
+  orders    OrderItem[]
+  rents     RentItem[]
 }
 
 model Product {
   id            Int       @id @default(autoincrement())
   title         String
   description   String?
-  published     Boolean   @default(false)
-  ownerId Int
-  owner    User      @relation(fields: [ownerId], references: [id])
+  published     DateTime  @default(now())
+  price         Float
+  rent          Float
+  ownerId       Int
+  owner         User      @relation(fields: [ownerId], references: [id])
   orderItems    OrderItem[]
+  rentItems     RentItem[]
+  productViews  ProductView[]
+  categories    ProductCategory[]
 }
 
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  products  ProductCategory[]
+}
 
 model OrderItem {
   id        Int        @id @default(autoincrement())
@@ -34,4 +45,30 @@ model OrderItem {
   userId    Int
   product   Product    @relation(fields: [productId], references: [id])
   user      User       @relation(fields: [userId], references: [id])
+}
+
+model RentItem {
+  id        Int        @id @default(autoincrement())
+  quantity  Int
+  productId Int
+  userId    Int
+  startDate DateTime
+  endDate   DateTime
+  product   Product    @relation(fields: [productId], references: [id])
+  user      User       @relation(fields: [userId], references: [id])
+}
+
+model ProductView {
+  id        Int        @id @default(autoincrement())
+  count     Int
+  productId Int
+  product   Product    @relation(fields: [productId], references: [id])
+}
+
+model ProductCategory {
+  productId Int
+  categoryId Int
+  product   Product   @relation(fields: [productId], references: [id])
+  category  Category  @relation(fields: [categoryId], references: [id])
+  @@id([productId, categoryId])
 }

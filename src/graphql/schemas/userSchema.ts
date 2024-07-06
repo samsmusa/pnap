@@ -8,6 +8,7 @@ export const userSchema = gql`
     password: String!
     products: [Product]
     orders: [OrderItem]
+    rents: [RentItem]
   }
 
   type AuthPayload {
@@ -19,6 +20,19 @@ export const userSchema = gql`
     users: [User]
     user(id: ID!): User
   }
+  
+  extend type Query {
+  userOrders: [OrderItem]
+}
+
+extend type Query {
+  userRents: [RentItem]
+}
+
+extend type Query {
+  userProducts: [Product]
+}
+
 
   extend type Mutation {
     createUser(email: String!, name: String, password: String!): User

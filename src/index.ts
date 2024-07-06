@@ -35,16 +35,18 @@ import {gql} from 'apollo-server-express';
 import {productSchema} from './graphql/schemas/productSchema';
 import {userSchema} from './graphql/schemas/userSchema';
 import {orderSchema} from './graphql/schemas/orderSchema';
+import {categorySchema} from './graphql/schemas/categorySchema';
+import {rentSchema} from './graphql/schemas/rentSchema';
+import {productViewSchema} from './graphql/schemas/productViewSchema';
 
 // Importing resolvers
 import {productResolvers} from './graphql/resolvers/productResolvers';
 import {userResolvers} from './graphql/resolvers/userResolvers';
 import {orderResolvers} from './graphql/resolvers/orderResolvers';
+import {rentResolvers} from './graphql/resolvers/rentResolvers';
+import {categoryResolvers} from './graphql/resolvers/categoryResolvers';
+import {productViewResolvers} from './graphql/resolvers/productViewResolvers';
 
-// Importing routes
-import productRoutes from './routes/productRoutes';
-import userRoutes from './routes/userRoutes';
-import orderRoutes from './routes/orderRoutes';
 
 // Root query and mutation
 const rootTypeDefs = gql`
@@ -76,24 +78,19 @@ const rootTypeDefs = gql`
 // });
 
 // Merging schemas and resolvers
-const typeDefs = mergeTypeDefs([rootTypeDefs, productSchema, userSchema, orderSchema]);
-const resolvers = mergeResolvers([productResolvers, userResolvers, orderResolvers]);
+const typeDefs = mergeTypeDefs([rootTypeDefs, productSchema, userSchema, orderSchema, rentSchema, categorySchema, productViewSchema]);
+const resolvers = mergeResolvers([productResolvers, userResolvers, orderResolvers, rentResolvers, categoryResolvers, productViewResolvers]);
 
-const schema = makeExecutableSchema({ typeDefs, resolvers });
+const schema = makeExecutableSchema({typeDefs, resolvers});
 
 const app = express();
 
-const server = new ApolloServer({ schema, context });
+const server = new ApolloServer({schema, context});
 
 server.start().then(() => {
-  server.applyMiddleware({ app });
-
-  app.use('/api/products', isAuthenticated, productRoutes);
-  app.use('/api/users', isAuthenticated, userRoutes);
-  app.use('/api/order-items', isAuthenticated, orderRoutes);
-
-  app.listen({ port: 4000 }, () => {
-    console.log(`Server ready at http://localhost:4000${server.graphqlPath}`);
-    console.log(`Swagger docs available at http://localhost:4000/api-docs`);
-  });
+    server.applyMiddleware({app});
+    app.listen({port: 4000}, () => {
+        console.log(`Server ready at http://localhost:4000${server.graphqlPath}`);
+        console.log(`Swagger docs available at http://localhost:4000/api-docs`);
+    });
 });

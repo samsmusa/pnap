@@ -10,14 +10,14 @@ export const orderResolvers = {
         },
     },
     Mutation: {
-        createOrderItem: async (parent: any, {userId, productId, quantity}: {
-            userId: number;
+
+        createOrderItem: async (parent: any, {productId, quantity}: {
             productId: number;
             quantity: number
         }, context: Context) => {
             return context.prisma.orderItem.create({
                 data: {
-                    user: {connect: {id: Number(userId)}},
+                    user: { connect: { id: Number(context.userId) } },
                     product: {connect: {id: Number(productId)}},
                     quantity,
                 },

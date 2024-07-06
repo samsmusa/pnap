@@ -14,7 +14,7 @@ export const orderSchema = gql`
   }
 
   extend type Mutation {
-    createOrderItem(userId: ID!, productId: ID!, quantity: Int!): OrderItem
+    createOrderItem(productId: ID!, quantity: Int!): OrderItem
     deleteOrderItem(id: ID!): OrderItem
   }
 `;
