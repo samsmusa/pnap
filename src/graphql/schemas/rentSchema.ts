@@ -16,7 +16,7 @@ export const rentSchema = gql`
   }
 
   extend type Mutation {
-    createRentItem(userId: ID!, productId: ID!, quantity: Int!, startDate: DateTime!, endDate: DateTime!): RentItem
+    createRentItem(productId: ID!, quantity: Int!, startDate: DateTime!, endDate: DateTime!): RentItem
     deleteRentItem(id: ID!): RentItem
   }
 `;

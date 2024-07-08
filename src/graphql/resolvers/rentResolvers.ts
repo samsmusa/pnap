@@ -21,16 +21,25 @@ export const rentResolvers = {
         },
     },
     Mutation: {
-        createRentItem: async (parent: any, {userId, productId, quantity, startDate, endDate}: {
-            userId: number;
+        createRentItem: async (parent: any, {productId, quantity, startDate, endDate}: {
             productId: number;
             quantity: number;
             startDate: Date;
             endDate: Date
         }, context: Context) => {
+            if (!context.userId) throw new Error('Unauthorized');
+            const product = await context.prisma.product.findUnique({
+                where: {id: Number(productId)},
+            })
+            if (!product) throw new Error('product not found');
+            if (product.ownerId === parseInt(context.userId)) throw new Error("User" +
+                " can't buy" +
+                " own" +
+                " product")
+
             return context.prisma.rentItem.create({
                 data: {
-                    user: {connect: {id: Number(userId)}},
+                    user: {connect: {id: Number(context.userId)}},
                     product: {connect: {id: Number(productId)}},
                     quantity,
                     startDate,
@@ -39,6 +48,7 @@ export const rentResolvers = {
             });
         },
         deleteRentItem: async (parent: any, {id}: { id: number }, context: Context) => {
+            if (!context.userId) throw new Error('Unauthorized');
             return context.prisma.rentItem.delete({
                 where: {id: Number(id)},
             });

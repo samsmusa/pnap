@@ -31,7 +31,13 @@ extend type Query {
 
 extend type Query {
   userProducts: [Product]
+  
+    boughtProducts: [OrderItem]
+    soldProducts: [OrderItem]
+    borrowedProducts: [RentItem]
+    lentProducts: [RentItem]
 }
+
 
 
   extend type Mutation {

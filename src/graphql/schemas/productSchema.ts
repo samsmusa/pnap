@@ -32,7 +32,7 @@ export const productSchema = gql`
 
   extend type Mutation {
     createProduct(title: String!, description: String, published: DateTime, price: Float, rent: Float, categoryIds: [ID!]): Product
-    updateProduct(id: ID!, title: String, description: String, published: DateTime, price: Float, rent: Float): Product
+    updateProduct(id: ID!, title: String, description: String, published: DateTime, price: Float, rent: Float, categoryIds: [ID!]): Product
     deleteProduct(id: ID!): Product
     createCategory(name: String!): Category
     updateCategory(id: ID!, name: String!): Category

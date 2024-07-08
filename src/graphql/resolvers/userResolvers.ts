@@ -12,31 +12,97 @@ export const userResolvers = {
         user: async (parent: any, {id}: { id: number }, context: Context) => {
             return context.prisma.user.findUnique({where: {id: Number(id)}});
         },
-        userOrders: async (parent: any, {}: {}, context: Context) => {
-            return context.prisma.orderItem.findMany({
-                where: {userId: Number(context.userId)},
-                include: {
-                    product: true,
-                },
-            });
+         userOrders: async (parent: any, args: any, context: Context) => {
+      if (!context.userId) throw new Error('Unauthorized');
+      return context.prisma.orderItem.findMany({
+        where: { userId: Number(context.userId) },
+        include: {
+          product: true,
         },
-        userRents: async (parent: any, {}: {}, context: Context) => {
-            return context.prisma.rentItem.findMany({
-                where: {userId: Number(context.userId)},
-                include: {
-                    product: true,
-                },
-            });
-        },
-        userProducts: async (parent: any, {}: {}, context: Context) => {
-            return context.prisma.product.findMany({
-                where: {ownerId: Number(context.userId)},
-                include: {
-                    categories: true,
-                },
-            });
-        },
+      });
     },
+    userRents: async (parent: any, args: any, context: Context) => {
+      if (!context.userId) throw new Error('Unauthorized');
+      return context.prisma.rentItem.findMany({
+        where: { userId: Number(context.userId) },
+        include: {
+          product: true,
+        },
+      });
+    },
+    userProducts: async (parent: any, args: any, context: Context) => {
+      if (!context.userId) throw new Error('Unauthorized');
+      return context.prisma.product.findMany({
+        where: { ownerId: Number(context.userId) },
+        include: {
+          categories: true,
+        },
+      });
+    },
+    boughtProducts: async (parent: any, args: any, context: Context) => {
+      if (!context.userId) throw new Error('Unauthorized');
+      return context.prisma.orderItem.findMany({
+        where: { userId: Number(context.userId) },
+        include: {
+          product: true,
+        },
+      });
+    },
+    soldProducts: async (parent: any, args: any, context: Context) => {
+      if (!context.userId) throw new Error('Unauthorized');
+      return context.prisma.orderItem.findMany({
+        where: { product: { ownerId: Number(context.userId) } },
+        include: {
+          product: true,
+          user: true,
+        },
+      });
+    },
+    borrowedProducts: async (parent: any, args: any, context: Context) => {
+      if (!context.userId) throw new Error('Unauthorized');
+      return context.prisma.rentItem.findMany({
+        where: { userId: Number(context.userId) },
+        include: {
+          product: true,
+        },
+      });
+    },
+    lentProducts: async (parent: any, args: any, context: Context) => {
+      if (!context.userId) throw new Error('Unauthorized');
+      return context.prisma.rentItem.findMany({
+        where: { product: { ownerId: Number(context.userId) } },
+        include: {
+          product: true,
+          user: true,
+        },
+      });
+    },
+  },
+    //     userOrders: async (parent: any, {}: {}, context: Context) => {
+    //         return context.prisma.orderItem.findMany({
+    //             where: {userId: Number(context.userId)},
+    //             include: {
+    //                 product: true,
+    //             },
+    //         });
+    //     },
+    //     userRents: async (parent: any, {}: {}, context: Context) => {
+    //         return context.prisma.rentItem.findMany({
+    //             where: {userId: Number(context.userId)},
+    //             include: {
+    //                 product: true,
+    //             },
+    //         });
+    //     },
+    //     userProducts: async (parent: any, {}: {}, context: Context) => {
+    //         return context.prisma.product.findMany({
+    //             where: {ownerId: Number(context.userId)},
+    //             include: {
+    //                 categories: true,
+    //             },
+    //         });
+    //     },
+    // },
     Mutation: {
         createUser: async (parent: any, {email, name, password}: {
             email: string;
